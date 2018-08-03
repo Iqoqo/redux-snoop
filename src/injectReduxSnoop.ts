@@ -24,5 +24,3 @@ export const injectReduxSnoop =  () => {
 
   return redux;
 };
-
-export default injectReduxSnoop;

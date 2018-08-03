@@ -22,7 +22,7 @@ export class ReduxSnoop {
      store && this.setupStore(store);
   }
 
-  getStore() {
+  getStore = () => {
     return this.store;
   }
 
@@ -30,7 +30,7 @@ export class ReduxSnoop {
     return this.steps;
   };
 
-  reset() {
+  reset = () => {
     this.steps = [];
   }
 
@@ -69,7 +69,7 @@ export class ReduxSnoop {
     });
   };
 
-  addStep(action, state) {
+  addStep = (action, state) => {
     if(!validateAction(action)){
       return;
     }
@@ -85,7 +85,6 @@ export class ReduxSnoop {
     self.dispatch = store.dispatch;
 
     function interceptedDispatch(action) {
-      
       self.dispatch.apply(this, arguments);
       self.addStep(action, store.getState())
     }

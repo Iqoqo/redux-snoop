@@ -22,15 +22,23 @@ export class ReduxSnoop {
      store && this.setupStore(store);
   }
 
+  getStore() {
+    return this.store;
+  }
+
+  getSteps = () => {
+    return this.steps;
+  };
+
+  reset() {
+    this.steps = [];
+  }
+
   dispose = () => {
     this.store.dispatch = this.dispatch;
     // Delete the store so this object is not reus
     this.store = undefined;
     this.dispatch = undefined;
-  };
-
-  getSteps = () => {
-    return this.steps;
   };
 
   /**
@@ -61,21 +69,14 @@ export class ReduxSnoop {
     });
   };
 
-  reset() {
-    this.steps = [];
-  }
-
   addStep(action, state) {
-    if(action.type.indexOf('@@redux/REPLACE')>=0) {
+    if(!validateAction(action)){
       return;
     }
+    const persistState = copy(state);
 
-    this.steps.push({ action, state });
+    this.steps.push({ action, state:persistState });
     this.update();
-  }
-  
-  getStore() {
-     return this.store;
   }
 
   private setupStore(store: Store) {
@@ -84,10 +85,9 @@ export class ReduxSnoop {
     self.dispatch = store.dispatch;
 
     function interceptedDispatch(action) {
+      
       self.dispatch.apply(this, arguments);
-      const persistState = copy(store.getState());
-      self.steps.push({ action, state: persistState });
-      self.update();
+      self.addStep(action, store.getState())
     }
 
     store.dispatch = interceptedDispatch as any;
@@ -102,6 +102,11 @@ export class ReduxSnoop {
   private subscribe(callback) {
     this.subscribers.push(callback);
   }
+}
+
+function validateAction(action) {
+  // Filter out redux related actions
+  return action.type.indexOf('@@redux')<0;
 }
 
 function checkSteps(steps, actionName: string[], skipExistingCount, callback) {

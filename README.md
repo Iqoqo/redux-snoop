@@ -1,6 +1,6 @@
 # redux-snoop 🕵️
 
-_Grey-box testing for redux workflow_ 
+_Grey-box testing for redux flow_ 
 
 # Introduction
 
@@ -12,7 +12,7 @@ Testing redux flow (beyond unit tests) is hard and requires the test code to hav
 2. Clean promise based syntax when dealing with complex async flow. 
 
 ## Why not redux-snoop?
-This library intercepts or patches redux methods. It doesn't do anything that you don't already do with `jest-mock` but it might not be suitable to everyone. 
+This library patches redux methods. It doesn't do anything that you don't already do with `jest-mock` but it might not be suitable to everyone. 
 
 ## Install
 ```bash

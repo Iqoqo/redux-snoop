@@ -61,7 +61,7 @@ describe('SpyReducer', () => {
 
     it('Should skip action steps before notification on async',async () => {
         const secondAction = {...action, check: 'out'}
-        setTimeout(() => store.dispatch(action), 5);
+        setTimeout(() => store.dispatch(action), 4);
         setTimeout(() => store.dispatch(secondAction), 5);
 
         const result = await snoop.waitForAction(action.type, 1);
@@ -99,7 +99,7 @@ describe('SpyReducer', () => {
         expect(steps).toHaveLength(1);
     })
 
-    it('getStore should return the store', () => {
+    it('getStore() should return the store', () => {
         const snoopStore = snoop.getStore();
         expect(snoopStore).toEqual(store);
     })

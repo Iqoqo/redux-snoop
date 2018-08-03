@@ -3,10 +3,16 @@
 _Grey-box testing for redux workflow_ 
 
 # Introduction
+
+Testing redux flow (beyond unit tests) is hard and requires the test code to have knowledge of internal implementation of the store creation and to alter it. This library introduces more of a grey-box approach and let you write tests when you don't have or want access to the actual store creation logic. 
+
 ## Why redux-snoop?
 
 1. **Doesn't alter your code** - snoop will attach itself to any *existing* redux store, meaning your test code and production code will behave the same.
 2. Clean promise based syntax when dealing with complex async flow. 
+
+## Why not redux-snoop?
+This library intercepts or overrides redux library's code. It doesn't do anything that you don't already do with `jest-mock` but it might not be suitable to everyone. 
 
 ## Install
 ```bash

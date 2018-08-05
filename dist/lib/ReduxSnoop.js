@@ -11,14 +11,20 @@ var ReduxSnoop = /** @class */ (function () {
         var _this = this;
         this.subscribers = [];
         this.steps = [];
+        this.getStore = function () {
+            return _this.store;
+        };
+        this.getSteps = function () {
+            return _this.steps;
+        };
+        this.reset = function () {
+            _this.steps = [];
+        };
         this.dispose = function () {
             _this.store.dispatch = _this.dispatch;
             // Delete the store so this object is not reus
             _this.store = undefined;
             _this.dispatch = undefined;
-        };
-        this.getSteps = function () {
-            return _this.steps;
         };
         /**
          * Returns a promise that resolves when an action is dispatched.
@@ -43,6 +49,14 @@ var ReduxSnoop = /** @class */ (function () {
                 });
             });
         };
+        this.addStep = function (action, state) {
+            if (!validateAction(action)) {
+                return;
+            }
+            var persistState = fast_copy_1.default(state);
+            _this.steps.push({ action: action, state: persistState });
+            _this.update();
+        };
         this.update = function () {
             _this.subscribers.forEach(function (subscriber) {
                 subscriber();
@@ -50,28 +64,13 @@ var ReduxSnoop = /** @class */ (function () {
         };
         store && this.setupStore(store);
     }
-    ReduxSnoop.prototype.reset = function () {
-        this.steps = [];
-    };
-    ReduxSnoop.prototype.addStep = function (action, state) {
-        if (action.type.indexOf('@@redux/REPLACE') >= 0) {
-            return;
-        }
-        this.steps.push({ action: action, state: state });
-        this.update();
-    };
-    ReduxSnoop.prototype.getStore = function () {
-        return this.store;
-    };
     ReduxSnoop.prototype.setupStore = function (store) {
         var self = this;
         self.store = store;
         self.dispatch = store.dispatch;
         function interceptedDispatch(action) {
             self.dispatch.apply(this, arguments);
-            var persistState = fast_copy_1.default(store.getState());
-            self.steps.push({ action: action, state: persistState });
-            self.update();
+            self.addStep(action, store.getState());
         }
         store.dispatch = interceptedDispatch;
     };
@@ -81,6 +80,10 @@ var ReduxSnoop = /** @class */ (function () {
     return ReduxSnoop;
 }());
 exports.ReduxSnoop = ReduxSnoop;
+function validateAction(action) {
+    // Filter out redux related actions
+    return action.type.indexOf('@@redux') < 0;
+}
 function checkSteps(steps, actionName, skipExistingCount, callback) {
     var step = findAction(steps, actionName, skipExistingCount);
     if (step) {

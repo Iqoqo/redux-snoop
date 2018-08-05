@@ -4,7 +4,7 @@ _Grey-box testing for redux flow_
 
 # Introduction
 
-Testing redux flow (beyond unit tests) is hard and requires the test code to have knowledge of internal implementation of the store creation and to alter it. This library introduces more of a grey-box approach and let you write tests when you don't have or want access to the actual store creation logic. 
+Testing redux flow (beyond unit tests) requires the test not only to have knowledge of internal implementation of store creation, but also to alter it. This library introduces more of a grey-box approach and let you write tests even if you don't have or want access to the actual store creation logic. 
 
 ## Why redux-snoop?
 

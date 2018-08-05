@@ -8,16 +8,16 @@ exports.injectReduxSnoop = function () {
         var store = createStore.apply(this, arguments);
         var reducer = arguments[0];
         store.snoop = new ReduxSnoop_1.ReduxSnoop();
-        var updatedReducer = function (state, action) {
-            var updatedState = reducer(state, action);
+        function updatedReducer(state, action) {
+            var updatedState = reducer.apply(this, arguments);
             store.snoop.addStep(action, updatedState);
             return updatedState;
-        };
+        }
+        ;
         store.replaceReducer(updatedReducer);
         return store;
     }
     redux.createStore = interceptCreateStore;
     return redux;
 };
-exports.default = exports.injectReduxSnoop;
 //# sourceMappingURL=injectReduxSnoop.js.map

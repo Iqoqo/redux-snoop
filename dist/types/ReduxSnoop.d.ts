@@ -13,16 +13,16 @@ export declare class ReduxSnoop {
     private subscribers;
     private steps;
     constructor(store?: Store);
-    dispose: () => void;
+    getStore: () => any;
     getSteps: () => IStep[];
+    reset: () => void;
+    dispose: () => void;
     /**
      * Returns a promise that resolves when an action is dispatched.
      * If the action already dispatched it will resolve immediately.
      */
     waitForAction: (actionName: string | string[], skip?: number) => Promise<IStep>;
-    reset(): void;
-    addStep(action: any, state: any): void;
-    getStore(): any;
+    addStep: (action: any, state: any) => void;
     private setupStore;
     private update;
     private subscribe;

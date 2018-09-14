@@ -13,5 +13,6 @@ verbose: true,
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
   collectCoverage: true,
   coveragePathIgnorePatterns: ["/node_modules/", "/test/", "/dist/"],
-  testEnvironment: "node"
+  testEnvironment: "node",
+  setupFiles: ["./register.js"]
 };

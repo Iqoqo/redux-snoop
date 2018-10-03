@@ -1,0 +1,93 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+#
+#
+
+version: 2
+
+defaults: &defaults
+  working_directory: ~/circleci-deployment
+  docker:
+    - image: circleci/node:10.8.0-stretch-browsers
+
+
+jobs:
+  ######################### build ##########################
+
+  "build":
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/circleci-deployment
+      - run:
+          name: "Show build tag"
+          command: echo $CIRCLE_TAG $CIRCLE_PROJECT_REPONAME
+      - run:
+          name: uninstall old yarn
+          command: "rm -rf ./usr/local/lib/node_modules/yarn"
+      - run:
+          name: install yarn 1.5.1
+          command: "sudo npm install -g yarn@1.5.1"
+      - run:
+          name: "Installing files"
+          command: "yarn install"
+      - run:
+          name: "Building"
+          command: "yarn run build"
+      - persist_to_workspace:
+          root: .
+          paths: .
+
+  "test":
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/circleci-deployment
+      - run:
+          name: "Test service"
+          command:  "yarn run test"
+      - run:
+          name: "Upload coverage"
+          command: "bash <(curl -s https://codecov.io/bash)"
+
+  "publish":
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/circleci-deployment
+      - run:
+          name: "Publishing to npm"
+          command:  "npm publish"
+      - run:
+          name: "Upload coverage"
+          command: "bash <(curl -s https://codecov.io/bash)"
+
+workflows:
+  version: 2
+  build-branch:
+    jobs:
+      - build:
+          context: web
+          filters:
+            branches:
+              ignore:
+                - master
+      - test: 
+          requires: 
+            - build
+
+  build-master:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: master
+      - test: 
+          requires: 
+            - build
+      - publish:
+          requires:
+            - test

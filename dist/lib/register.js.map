@@ -1,1 +1,1 @@
-{"version":3,"file":"register.js","sourceRoot":"","sources":["../../src/register.ts"],"names":[],"mappings":";AAAA,IAAI,CAAC,IAAI,CAAC,OAAO,EAAE;IACf,IAAM,MAAM,GAAG,OAAO,CAAC,aAAa,CAAC,CAAC,gBAAgB,CAAC;IACvD,OAAO,MAAM,EAAE,CAAC;AAClB,CAAC,CAAC,CAAA"}
+{"version":3,"file":"register.js","sourceRoot":"","sources":["../../src/register.ts"],"names":[],"mappings":";AACI,IAAI,CAAC,IAAI,CAAC,OAAO,EAAE;IACnB,IAAM,MAAM,GAAG,OAAO,CAAC,aAAa,CAAC,CAAC,gBAAgB,CAAC;IACvD,OAAO,MAAM,EAAE,CAAC;AAClB,CAAC,CAAC,CAAA"}
